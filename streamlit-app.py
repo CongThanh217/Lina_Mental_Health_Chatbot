@@ -556,12 +556,12 @@ with tab1:
             else:
                 st.session_state.chat_history.append({"role": "You", "parts": [user_input]})
                 response = convo(user_input, st.session_state.chat)
-          
+            if enable_audio:
+                generate_and_play_audio(response)
             st.session_state.chat_history.append({"role" : "Lina", "parts": [response]})
             st.session_state.user_input = ""  # Clear the input field
             st.session_state["uploader_key"] += 1
-            if enable_audio:
-                generate_and_play_audio(response)
+
     def input_image_setup(uploaded_file):
         if uploaded_file is not None:
             bytes_data = uploaded_file.getvalue()
