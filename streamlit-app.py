@@ -17,7 +17,7 @@ from langdetect import detect
 import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import storage
-
+import streamlit.components.v1 as components
 # set up text-to-speech client
 
 credentials = service_account.Credentials.from_service_account_info(
@@ -42,11 +42,13 @@ st.set_page_config(page_title="LINA CHATBOT", page_icon="🐱", layout="wide")
 
 
 st.title("I'M LINA - HERE FOR :blue[YOU] ~")
+
 # Set font
 st.markdown("""
+
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');        
-        body {
+        body{
             font-family: "Nunito", Helvetica Neue, sans-serif;
             font-weight: 400;
             font-size: 1rem;
@@ -71,8 +73,8 @@ st.markdown("""
             height: 100px;
         }
         div[data-testid='stTextInputRootElement'] {
-        
-        height: 60px;
+        margin-left: 15px;
+        height: 48px;
         width: 100%;
         transition: all 0.3s ease;
         }
@@ -80,8 +82,8 @@ st.markdown("""
 
         .stTextInput {
 
-            [data-baseweb="base-input"]{
-            height: 50px;
+            [data-baseweb='base-input']{
+            height: 100%;
             border: 2px;
             border-radius: 3px;
             padding: 10px;
@@ -101,10 +103,20 @@ st.markdown("""
     background-color: #f5f5f5;
     border-radius: 10px;
 }
+    [data-testid='stIFrame']{
+        width: 100%;
+        height: 100%;
+        font-family: "Nunito", Helvetica Neue, sans-serif;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.75;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # Style input 
+from streamlit.components.v1 import html
+
 
 
 
@@ -112,66 +124,39 @@ st.markdown("""
 st.markdown("""
     <style>
         /* Style the chat container */
-        .chat-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            height: 500px; /* Set fixed height */
-            overflow-y: auto; /* Enable scrolling */
-        }
-
-        /* Style for user messages */
-        .user-message {
-            text-align: right;
-            margin: 10px 0;
-        }
-
-        .user-message div {
-            display: inline-block;
-            background-color: #dcf8c6;
-            color: black;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 70%;
-            word-wrap: break-word;
-        }
-
-        /* Style for bot messages */
-        .bot-message {
-            text-align: left;
-            margin: 10px 0;
-        }
-
-        .bot-message div {
-            display: inline-block;
-            background-color: #fff;
-            color: black;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 70%;
-            word-wrap: break-word;
-        }
+    
            [data-testid='stFileUploader'] {
         width: max-content;
+        margin-left: 10px
+    }
+    .st-emotion-cache-1erivf3{
+        display: block;
     }
     [data-testid='stFileUploader'] section {
+    
         padding: 0;
-        height: 60px;
+        height: 40px;
         float: left;
         background-color: transparent;
     }
     [data-testid='stFileUploader'] section > input + div {
+
         display: none;
     }
     [data-testid='stFileUploader'] section + div {
-        height: 60px;
+        height: 100%;
         float: right;
         padding-top: 0;
-    }
 
+    }
+    [title="st.iframe"]{
+        width: 100%;
+        font-family: "Nunito", Helvetica Neue, sans-serif;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.75;
+        
+    }
       
     }
 
@@ -255,7 +240,7 @@ If the user is talking about a specific issue or topic, focus the conversation o
 - Human-Like Responses: Use short, relatable, and warm phrases to mimic natural human conversations. Address the user with terms of endearment like buddy, bae, or darling to enhance emotional support. Elaborate only when needed but keep the tone friendly and easy-going.
 - Guidance Only: You are here to provide thoughtful and compassionate support related to emotional well-being, life challenges, and relationships. While you should primarily focus on these areas, feel free to engage with the user in a friendly, natural way that makes them feel comfortable. You can suggest light-hearted distractions or positive encouragement when appropriate, but always keep the conversation supportive and non-judgmental.
 - Boundary Protection: Avoid interactions beyond life counseling, such as providing technical advice or instructions unrelated to emotional support.
-- Medical Help: If a user shows signs of extreme distress or feeling very down, always suggest professional help with care. For example: 'It sounds like you're going through a really tough time right now. Talking to a therapist or doctor could really help you through this. You're not alone in this, darling.' Never omit this suggestion if the situation warrants it.
+- Medical Help: If a user shows signs of extreme distress, suicide, or feeling very down, always suggest professional help with care and shift the conversation towards something neutral or comforting. This could be something light, like a calming activity, or even offering a distraction through a fun conversation topic. For example: 'It sounds like you're going through a really tough time right now. Talking to a therapist or doctor could really help you through this. You're not alone in this, darling.' Never omit this suggestion if the situation warrants it.
 
  Responses:
 
@@ -434,35 +419,29 @@ if 'chat' not in st.session_state:
     st.session_state.chat = model.start_chat(history=[])
     initial_response = convo(system_instruction, st.session_state.chat)
     st.session_state.chat_history.append({"role": "Lina", "parts": [initial_response]})
-    generate_and_play_audio(initial_response)
 
 
 # Main app
 # st.title("LINA - I'M HERE FOR YOU ~")
-
+if "selected_tab" not in st.session_state:
+    st.session_state.selected_tab = "Chat" 
 # Add tabs for Chat and About
 tab1, tab2, tab3 = st.tabs(["Chat", "Mindfullness🎧", "Anxiety Test📑"])
 
 container_style = """
-<div style='
-    border-radius: 15px;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: transparent;
-    height: 410px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-'>
+<style>@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');</style>
+<div id="chat_container" style="font-family: 'Nunito', 'Helvetica Neue', sans-serif; font-weight: 400; font-size: 1rem; line-height: 1.75; border-radius: 15px; padding: 0 10px; margin: 0 0; background-color: transparent; height: 400px; overflow-y: auto; display: flex; flex-direction: column; width: 100%;">
     {content}
 </div>
+
 """
+
 # Style message
 style_user_message = """
 <div style='
     display: flex;
     justify-content: flex-end;
-    margin: 5px 0;
+    margin: 5px 3px;
 '>
     <div style='
         background-color: #DCF8C6;
@@ -497,7 +476,7 @@ style_image = """
 <div style='
     display: flex;
     justify-content: flex-end;  
-    margin: 5px 0;
+    margin: 5px 3px;
 '>
     <img src="data:image/png;base64,{}" style='
         border-radius: 10px;
@@ -524,27 +503,55 @@ def typewriter_effect(text, placeholder, delay=0.05):
         placeholder.markdown(message, unsafe_allow_html=True)
         time.sleep(delay)
 
+# my_js = """
+#     document.addEventListener('readystatechange', event => { 
+#         if (event.target.readyState === "complete") {
+#             setTimeout(function() {
+#                 var textArea = document.getElementById("chat_container");
+#                 console.log(textArea);
+#                 if (textArea) {
+#                     textArea.scrollTop = textArea.scrollHeight;
+#                 }
+#             }, 500);  // Delay for 500ms to give time for the chat_container to be rendered
+#         }
+#     });
+# """
+# # Wrap the JavaScript in HTML
+# my_html = f"<script defer>{my_js}</script>"
+
+#     # Execute your app
+# html(my_html)
 if "messages" not in st.session_state:
     st.session_state.messages = []
 with tab1:
-    with st.container():
-
     # Display chat history
-        st.session_state.messages = []
-        for value in st.session_state.chat_history:
-            if value["role"] == "You":
-                st.session_state.messages.append(style_user_message.format(value['parts'][0]))
-                if len(value["parts"]) > 1:
-                    encoded_image = image_to_base64(value["parts"][1])
-                    st.session_state.messages.append(style_image.format(encoded_image))
-            else:
-                st.session_state.messages.append(style_bot_message.format(value['parts'][0]))
-        content = "".join(st.session_state.messages)  # Combine all messages
-        st.markdown(container_style.format(content=content), unsafe_allow_html=True)
+    st.session_state.messages = []
+    for value in st.session_state.chat_history:
+        if value["role"] == "You":
+            st.session_state.messages.append(style_user_message.format(value['parts'][0]))
+            if len(value["parts"]) > 1:
+                encoded_image = image_to_base64(value["parts"][1])
+                st.session_state.messages.append(style_image.format(encoded_image))
+        else:
+            st.session_state.messages.append(style_bot_message.format(value['parts'][0]))
+    
+    content = "".join(st.session_state.messages)
+    content_style = container_style.format(content=content)
+    content_style += f"""
+    <script>
+    var textArea = document.getElementById("chat_container");
+    console.log(textArea)
+    a = textArea.scrollHeight + 20;
 
+    textArea.scrollTop = a;
+    </script>
+    """
+    # st.components.v1.html(testjs)
+    st.components.v1.html(content_style, height=420)
 
     # Function to process user input
     def process_user_input():
+     
         user_input = st.session_state.user_input
         if user_input:
             if uploaded_image is not None:
@@ -561,7 +568,6 @@ with tab1:
             st.session_state.chat_history.append({"role" : "Lina", "parts": [response]})
             st.session_state.user_input = ""  # Clear the input field
             st.session_state["uploader_key"] += 1
-
     def input_image_setup(uploaded_file):
         if uploaded_file is not None:
             bytes_data = uploaded_file.getvalue()
@@ -570,10 +576,6 @@ with tab1:
         else:
             raise FileNotFoundError("No file uploaded")
  
-    
-    def get_gemini_response(input, image, prompt):
-        responses = model.generate_content([input, image[0], prompt])
-        return responses
     if "uploader_key" not in st.session_state:
         st.session_state["uploader_key"] = 1
     
@@ -584,16 +586,16 @@ with tab1:
     # st.write("Keys in st.session_state:")
     # for key, value in st.session_state.items():
     #     st.write(f"Key: {key}, Value: {value}")
+  
 
-
-    col1, col2 = st.columns([3, 1])  # Chia cột: col1 (input), col2 (icon)
+    col1, col2 = st.columns([4, 1])  # Chia cột: col1 (input), col2 (icon)
 
     with col1:
     # Ô input
         st.text_input(
             "",
             label_visibility="collapsed",
-            placeholder="What's on your mind?",
+            placeholder="Bạn đang nghĩ gì vậy...",
             key="user_input",
             on_change=process_user_input,
         )
@@ -602,29 +604,6 @@ with tab1:
     with col2:
     # Nút gửi với icon
         uploaded_image = st.file_uploader("", label_visibility="collapsed", type=["jpg", "jpeg", "png"],  key=st.session_state["uploader_key"])
-
-
-
-
-    # Upload image
-   
-
-
-    # submit = st.button("Analyze the Image")
-    # if submit:
-    #     image_data = input_image_setup(uploaded_file)
-    #     response = get_gemini_response(input_prompt, image_data, input_prompt)
-    #     st.subheader("Analysis Result:")
-    #     for text_response in response:
-    #         st.write(text_response)
-
-    # Clear chat button
-    
-
-   
-    # disclaimer in main page
- 
-
 
 
 # base dir
@@ -636,27 +615,27 @@ json_file_path = "static/mindfulness/mindfulness.json"
 
 if os.path.exists(json_file_path):
     with open(json_file_path, "r") as json_file:
-        mindfulness_exercises = json.load(json_file)["mindfulness_exercises"]
+        st.session_state.mindfulness_exercises = json.load(json_file)["mindfulness_exercises"]
 else:
     st.error(f"JSON file not found: {json_file_path}")
-    mindfulness_exercises = []
+    st.session_state.mindfulness_exercises = []
 
 
 with tab2:
-    st.markdown("# **🧘Mindfulness Exercises**")
-    st.info("**Tip:** Select an exercise from the dropdown menu to practice mindfulness.", icon="💡")
+    tab2.markdown("# **🧘Mindfulness Exercises**")
+    tab2.info("**Tip:** Select an exercise from the dropdown menu to practice mindfulness.", icon="💡")
 
-    if mindfulness_exercises:
+    if st.session_state.mindfulness_exercises:
         # Dropdown (selectbox) for choosing an exercise
-        exercise_titles = [exercise["title"] for exercise in mindfulness_exercises]
-        selected_exercise_title = st.selectbox("", exercise_titles, label_visibility="collapsed")
+        exercise_titles = [exercise["title"] for exercise in st.session_state.mindfulness_exercises]
+        selected_exercise_title = tab2.selectbox("", exercise_titles, label_visibility="collapsed")
 
         # Find the selected exercise from the list
-        selected_exercise = next(ex for ex in mindfulness_exercises if ex["title"] == selected_exercise_title)
+        selected_exercise = next(ex for ex in st.session_state.mindfulness_exercises if ex["title"] == selected_exercise_title)
 
         # Display the selected exercise details
-        st.subheader(selected_exercise["title"])
-        st.write(selected_exercise["description"])
+        tab2.subheader(selected_exercise["title"])
+        tab2.write(selected_exercise["description"])
 
         # Resolve the full file path
         audio_path = os.path.join("./static/mindfulness/", selected_exercise["file_name"])
@@ -664,14 +643,14 @@ with tab2:
         # Check if the file exists and display the audio player
         if os.path.exists(audio_path):
             with open(audio_path, "rb") as audio_file:
-                st.audio(audio_file.read(), format="audio/mp3")
+                tab2.audio(audio_file.read(), format="audio/mp3")
         else:
-            st.error(f"🚫 **Audio file not found:** `{selected_exercise['file_name']}`")
+            tab2.error(f"🚫 **Audio file not found:** `{selected_exercise['file_name']}`")
 
         # Additional info
-        st.markdown("---")
+        tab2.markdown("---")
     else:
-        st.warning("No mindfulness exercises found. Please check the JSON file.")
+        tab2.warning("No mindfulness exercises found. Please check the JSON file.")
 
 # Load tests from json file
 with open("static/test/tests.json") as file:
@@ -746,7 +725,6 @@ with tab3:
             st.error(questions)
         else:
             answers = []
-            
             # Display questions and options for answers
             for question in questions:
                 answer = st.radio(question["question"], [option["text"] for option in question["options"]])
@@ -762,20 +740,6 @@ with tab3:
                 # Show result message
                 result_message = get_test_messages(selected_test, score)
                 st.subheader(result_message)
-
-
-
-    # with st.expander("Instructions"):
-    #     st.markdown(
-    #         """
-    #         This test is designed to help you understand the severity of your anxiety symptoms. 
-    #         Please answer the following questions based on how you have felt in the past week.
-    #         """
-    #     )
-   
-
-    
-
 
 
 # Sidebar components
@@ -801,3 +765,10 @@ st.sidebar.markdown("---")
 #     - [Mindfulness Exercises](https://www.mindful.org/category/meditation/mindfulness-exercises/)
 #     - [Self-Care Tips](https://www.verywellmind.com/self-care-strategies-overall-stress-reduction-3144729)
 #     """)
+
+# Define your javascript
+
+
+if "initial_rerun_done" not in st.session_state:
+    st.session_state.initial_rerun_done = True
+    st.rerun()
