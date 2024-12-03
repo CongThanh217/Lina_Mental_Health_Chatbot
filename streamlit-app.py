@@ -24,7 +24,7 @@ from io import BytesIO
 
 #set up speech-to-text client
 client_openai = OpenAI(
-    api_key = st.secrets["OPENAI_API_KEY"]
+    api_key=st.secrets["OPENAI_API_KEY"]
 )
 
 
@@ -610,7 +610,7 @@ st.markdown("""
     display: flex;
     flex: 1 1 0%;
     flex-direction: column;
-    gap: 1rem;
+    gap: 13px;
     }
    </style>
 
@@ -695,7 +695,7 @@ with tab1:
             ])
             if enable_audio:
                 generate_and_play_audio(response, gender, voice_selected)
-        
+            
 
     def process_audio(audio_input):
         if audio_input:
