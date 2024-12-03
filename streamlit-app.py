@@ -611,6 +611,7 @@ st.markdown("""
     flex: 1 1 0%;
     flex-direction: column;
     gap: 1rem;
+    }
    </style>
 
 # """, unsafe_allow_html=True)
