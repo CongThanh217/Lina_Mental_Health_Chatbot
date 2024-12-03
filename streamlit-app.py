@@ -24,7 +24,7 @@ from io import BytesIO
 
 #set up speech-to-text client
 client_openai = OpenAI(
-    api_key = "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"
+    api_key = st.secrets["OPENAI_API_KEY"]
 )
 
 
