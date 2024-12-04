@@ -260,10 +260,10 @@ genai.configure(api_key=GOOGLE_API_KEY)
 # }
 
 generation_config = {
-    "temperature": 1,
-    "top_p": 0.94,
+    "temperature": 0.7,
+    "top_p": 0.90,
     "top_k": 0,
-    "max_output_tokens": 8024,
+    "max_output_tokens": 1000,
 }
 
 safety_settings = [
