@@ -422,7 +422,7 @@ model = genai.GenerativeModel(
 
 
 
-voices = [ "Wavenet", "Standard", "Neutral"]
+voices = [ "Wavenet", "Standard", "MEOMOE"]
 
 voice_selected = st.sidebar.selectbox("Select Voice", voices)
 
