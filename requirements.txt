@@ -7,3 +7,4 @@ google-cloud-texttospeech
 pygame
 langdetect
 google-cloud-storage
+openai
