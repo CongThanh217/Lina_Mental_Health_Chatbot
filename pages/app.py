@@ -61,7 +61,9 @@ def get_user_id_from_username(username):
             user=USER,
             password=PASSWORD,
             database=DATABASE,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            charset   = 'utf8mb4',
+            collation = 'utf8mb4_unicode_ci',
         )
         
         # Tạo con trỏ để thực hiện truy vấn
@@ -98,7 +100,9 @@ def get_sessions_by_user_id(user_id):
             user=USER,
             password=PASSWORD,
             database=DATABASE,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            charset   = 'utf8mb4',
+            collation = 'utf8mb4_unicode_ci',
         )
         
         # Tạo con trỏ để thực hiện truy vấn
@@ -137,7 +141,9 @@ def save_session(user_id):
             user=USER,
             password=PASSWORD,
             database=DATABASE,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            charset   = 'utf8mb4',
+            collation = 'utf8mb4_unicode_ci',
         )
         
         
@@ -723,7 +729,9 @@ def save_chat_to_db(user_id, session_id, chat_history):
             user=USER,
             password=PASSWORD,
             database=DATABASE,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            charset   = 'utf8mb4',
+            collation = 'utf8mb4_unicode_ci',
         
     )
     cursor = connection.cursor()
@@ -779,7 +787,9 @@ def get_chat_history(session_id):
             user=USER,
             password=PASSWORD,
             database=DATABASE,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            charset   = 'utf8mb4',
+            collation = 'utf8mb4_unicode_ci',
         )
         cursor = connection.cursor()
 
@@ -833,7 +843,9 @@ def delete_session_by_id(user_id, session_id):
             user=USER,
             password=PASSWORD,
             database=DATABASE,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            charset   = 'utf8mb4',
+            collation = 'utf8mb4_unicode_ci',
         )
 
         # Create a cursor object
@@ -874,7 +886,9 @@ def update_session_created_at(session_id):
             user=USER,
             password=PASSWORD,
             database=DATABASE,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            charset   = 'utf8mb4',
+            collation = 'utf8mb4_unicode_ci',
         )
 
         # Create a cursor object
