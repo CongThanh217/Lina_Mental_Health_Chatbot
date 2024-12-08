@@ -17,6 +17,11 @@ from streamlit_authenticator.utilities import (CredentialsError,
 
 
 
+# MySQL Connection Parameters
+HOST = st.secrets['HOST']  # Use 'localhost' for local MySQL
+USER =  st.secrets['USER'] # Default MySQL username
+PASSWORD =  st.secrets['PASSWORD']  # Replace with your MySQL root password
+DATABASE = st.secrets['DATABASE']
 
 
 st.set_page_config(page_title="LINA CHATBOT", page_icon="🐱", initial_sidebar_state='collapsed')
@@ -60,13 +65,6 @@ st.markdown("""
 
     </style>
 """, unsafe_allow_html=True)
-
-
-# MySQL Connection Parameters
-HOST = 'localhost'  # Use 'localhost' for local MySQL
-USER = 'root'  # Default MySQL username
-PASSWORD = 'Thanh8c123'  # Replace with your MySQL root password
-DATABASE = 'user_management'  
 
 # Function to create connection to MySQL
 def get_db_connection():
@@ -143,6 +141,7 @@ def get_usernames():
 # Email validation function (same as before)
 def validate_email(email):
     pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+
     return bool(re.match(pattern, email))
 
 # Username validation function (same as before)
@@ -196,51 +195,57 @@ def sign_up():
 
 
 # Đảm bảo lấy dữ liệu từ fetch_users()
-try:
-    users = fetch_users()
-    print(users)
-    if users:  # Kiểm tra xem dữ liệu người dùng có hợp lệ không
-        emails = []
-        usernames = []
-        passwords = []
+def log_in():
+    try:
+        users = fetch_users()
+        if users:  # Kiểm tra xem dữ liệu người dùng có hợp lệ không
+            emails = []
+            usernames = []
+            passwords = []
 
-        for user in users:
-            emails.append(user[1])  # Sử dụng chỉ số (0) để lấy email từ tuple
-            usernames.append(user[2])  # Sử dụng chỉ số (1) để lấy username
-            passwords.append(user[3])  # Sử dụng chỉ số (2) để lấy password
+            for user in users:
+                emails.append(user[2])  # Sử dụng chỉ số (0) để lấy email từ tuple
+                usernames.append(user[1])  # Sử dụng chỉ số (1) để lấy username
+                passwords.append(user[3])  # Sử dụng chỉ số (2) để lấy password
 
-        credentials = {'usernames': {}}
-        for index in range(len(emails)):
-            credentials['usernames'][usernames[index]] = {
-                'name': usernames[index],  # Đây là tên hiển thị
-                'password': passwords[index],  # Mật khẩu
-                'email': emails[index]  # Thêm trường email
-           }
-        # Cấu hình Authentication
-      
-        Authenticator = stauth.Authenticate(credentials, cookie_name='Streamli1', key='abcdef', cookie_expiry_days=4)
-     
-        try:
-            Authenticator.login("main", fields={'form': ':green[login]'})
-        except Exception as e:
-            st.error(e)
-        # Thêm điều kiện kiểm tra nếu trả về None
-        print(st.session_state.authentication_status)
-        if st.session_state.authentication_status:
-            st.success("Login Successful")
-            st.switch_page("pages/app.py")
-        elif st.session_state.authentication_status != None and st.session_state.authentication_status == False:
-            st.error("Wrong email or password")
+            credentials = {'usernames': {}}
+            for index in range(len(emails)):
+                credentials['usernames'][usernames[index]] = {
+                    'name': usernames[index],  # Đây là tên hiển thị
+                    'password': passwords[index],  # Mật khẩu
+                    'email': emails[index]  # Thêm trường email
+            }
+            # Cấu hình Authentication
+            
+            Authenticator = stauth.Authenticate(credentials, cookie_name='Streamli1', key='abcdef', cookie_expiry_days=4)
         
-        if st.button("Sign Up"):
-            sign_up()
+            try:
+                Authenticator.login("main", fields={'form': ':green[login]'})
+            except Exception as e:
+                st.error(e)
+            # Thêm điều kiện kiểm tra nếu trả về None
+            print(st.session_state.authentication_status)
+            if st.session_state.authentication_status:
+                st.success("Login Successful")
+                st.switch_page("pages/app.py")
+            elif st.session_state.authentication_status != None and st.session_state.authentication_status == False:
+                st.error("Wrong email or password")
             
         
-
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        raise 
+                
             
-    else:
-        st.error("No users found. Please ensure your database has users.")
 
-except Exception as e:
-    st.error(f"An error occurred: {e}")
-    raise
+                
+        
+
+option = st.sidebar.selectbox("Navigate", ["Login", "Sign up"] , key="nav_selectbox")
+
+# Chọn "Sign up" sẽ hiển thị form đăng ký
+if option == "Sign up":
+    sign_up()
+elif option == "Login":
+    log_in()
+

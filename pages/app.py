@@ -26,17 +26,41 @@ from streamlit_lottie import st_lottie_spinner
 import requests
 import time
 
-# Tạo Session ID ngẫu nhiên
-# Kết nối đến cơ sở dữ liệu MySQL
+# MySQL Connection Parameters
+HOST = st.secrets['HOST']  # Use 'localhost' for local MySQL
+USER =  st.secrets['USER'] # Default MySQL username
+PASSWORD =  st.secrets['PASSWORD']  # Replace with your MySQL root password
+DATABASE = st.secrets['DATABASE']
 
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+client_openai = OpenAI(
+    api_key= OPENAI_API_KEY
+)
+
+# set up text-to-speech client
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+
+storage_client = storage.Client(credentials=credentials)
+
+# Tạo đối tượng client cho Google Cloud Text-to-Speech
+client = texttospeech.TextToSpeechClient(credentials=credentials)
+
+audio_config = texttospeech.AudioConfig(
+    audio_encoding=texttospeech.AudioEncoding.MP3,
+    effects_profile_id=["small-bluetooth-speaker-class-device"],
+)
+
+# Tạo Session ID ngẫu nhiên
 def get_user_id_from_username(username):
     try:
         # Thiết lập kết nối đến MySQL
         connection = mysql.connector.connect(
-            host='localhost',          # Địa chỉ máy chủ MySQL
-            user='root',      # Tên người dùng MySQL
-            password='Thanh8c123',  # Mật khẩu MySQL
-            database='user_management'   # Tên cơ sở dữ liệu
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
         )
         
         # Tạo con trỏ để thực hiện truy vấn
@@ -69,10 +93,10 @@ def get_user_id_from_username(username):
 def get_sessions_by_user_id(user_id):
     try:
         connection = mysql.connector.connect(
-            host='localhost',          # Địa chỉ máy chủ MySQL
-            user='root',      # Tên người dùng MySQL
-            password='Thanh8c123',  # Mật khẩu MySQL
-            database='user_management'   # Tên cơ sở dữ liệu
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
         )
         
         # Tạo con trỏ để thực hiện truy vấn
@@ -107,10 +131,10 @@ def save_session(user_id):
     # Kết nối tới cơ sở dữ liệu MySQL
     try:
         connection = mysql.connector.connect(
-            host='localhost',          # Địa chỉ máy chủ MySQL
-            user='root',      # Tên người dùng MySQL
-            password='Thanh8c123',  # Mật khẩu MySQL
-            database='user_management'   # Tên cơ sở dữ liệu
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
         )
         
         
@@ -150,29 +174,6 @@ if "session_id" not in st.session_state:
     save_session(st.session_state.user_id)
 elif st.session_state.session_id == "":
     save_session(st.session_state.user_id)
-
-
-#set up speech-to-text client
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
-client_openai = OpenAI(
-    api_key= OPENAI_API_KEY
-)
-
-
-# set up text-to-speech client
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
-)
-
-storage_client = storage.Client(credentials=credentials)
-
-# Tạo đối tượng client cho Google Cloud Text-to-Speech
-client = texttospeech.TextToSpeechClient(credentials=credentials)
-
-audio_config = texttospeech.AudioConfig(
-    audio_encoding=texttospeech.AudioEncoding.MP3,
-    effects_profile_id=["small-bluetooth-speaker-class-device"],
-)
 
 
 
@@ -715,10 +716,11 @@ def generate_summary(chat_text):
 
 def save_chat_to_db(user_id, session_id, chat_history):
     connection = mysql.connector.connect(
-        host='localhost',          # Địa chỉ máy chủ MySQL
-        user='root',      # Tên người dùng MySQL
-        password='Thanh8c123',  # Mật khẩu MySQL
-        database='user_management'   # Tên cơ sở dữ liệu
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
+        
     )
     cursor = connection.cursor()
 
@@ -769,10 +771,10 @@ def get_chat_history(session_id):
     try:
         # Kết nối đến cơ sở dữ liệu MySQL
         connection = mysql.connector.connect(
-            host='localhost',          # Địa chỉ máy chủ MySQL
-            user='root',      # Tên người dùng MySQL
-            password='Thanh8c123',  # Mật khẩu MySQL
-            database='user_management'   # Tên cơ sở dữ liệu
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
         )
         cursor = connection.cursor()
 
@@ -822,10 +824,10 @@ def delete_session_by_id(user_id, session_id):
     try:
         # Connect to the database
         connection = mysql.connector.connect(
-            host='localhost',          # MySQL server address
-            user='root',               # MySQL username
-            password='Thanh8c123',     # MySQL password
-            database='user_management' # Database name
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
         )
 
         # Create a cursor object
@@ -861,11 +863,11 @@ def delete_session_by_id(user_id, session_id):
 def update_session_created_at(session_id):
     try:
         # Connect to the database
-        connection = mysql.connector.connect(
-            host="localhost",          # MySQL server address
-            user="root",               # MySQL username
-            password="Thanh8c123",     # MySQL password
-            database="user_management" # Database name
+        connection = mysql.connector.connect( 
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE
         )
 
         # Create a cursor object
