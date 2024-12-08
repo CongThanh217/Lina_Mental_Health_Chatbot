@@ -140,8 +140,7 @@ def get_usernames():
 
 # Email validation function (same as before)
 def validate_email(email):
-    pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
-
+    pattern = r"^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
     return bool(re.match(pattern, email))
 
 # Username validation function (same as before)
