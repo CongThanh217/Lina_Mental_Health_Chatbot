@@ -784,7 +784,7 @@ def get_chat_history(session_id):
         cursor = connection.cursor()
 
         # Truy vấn dữ liệu từ bảng message theo session_id
-        query = "SELECT role, content, image_data FROM message WHERE session_id = %s ORDER BY timestamp"
+        query = "SELECT role, content, image_data FROM message WHERE session_id = %s"
         cursor.execute(query, (session_id,))
         messages = cursor.fetchall()
 
