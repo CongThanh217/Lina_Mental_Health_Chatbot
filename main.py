@@ -73,7 +73,8 @@ def get_db_connection():
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         )
         print("Connected to MySQL")
         return connection

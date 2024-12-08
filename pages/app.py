@@ -60,7 +60,8 @@ def get_user_id_from_username(username):
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         )
         
         # Tạo con trỏ để thực hiện truy vấn
@@ -96,7 +97,8 @@ def get_sessions_by_user_id(user_id):
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         )
         
         # Tạo con trỏ để thực hiện truy vấn
@@ -134,7 +136,8 @@ def save_session(user_id):
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         )
         
         
@@ -719,7 +722,8 @@ def save_chat_to_db(user_id, session_id, chat_history):
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         
     )
     cursor = connection.cursor()
@@ -774,7 +778,8 @@ def get_chat_history(session_id):
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         )
         cursor = connection.cursor()
 
@@ -827,7 +832,8 @@ def delete_session_by_id(user_id, session_id):
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         )
 
         # Create a cursor object
@@ -867,7 +873,8 @@ def update_session_created_at(session_id):
             host=HOST,
             user=USER,
             password=PASSWORD,
-            database=DATABASE
+            database=DATABASE,
+            auth_plugin='mysql_native_password'
         )
 
         # Create a cursor object
