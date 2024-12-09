@@ -408,7 +408,7 @@ generation_config = {
     "top_p": 0.90,
     "top_k": 0,
     "max_output_tokens": 1000,
-    "frequency_penalty" : 1
+    "frequency_penalty" : 0.1
 }
 
 safety_settings = [
