@@ -8,3 +8,7 @@ pygame
 langdetect
 google-cloud-storage
 openai
+streamlit_lottie
+mysql.connector
+streamlit_lottie
+streamlit_authenticator
