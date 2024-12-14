@@ -2,7 +2,6 @@ google.generativeai
 strip_markdown
 pyttsx3
 streamlit
-pymongo
 google-cloud-texttospeech
 pygame
 langdetect
@@ -12,3 +11,7 @@ streamlit_lottie
 mysql.connector
 streamlit_lottie
 streamlit_authenticator
+plotly
+pytz
+datetime
+pandas

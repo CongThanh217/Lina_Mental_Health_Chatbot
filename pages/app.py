@@ -32,12 +32,8 @@ import pandas as pd
 import plotly.express as px
 import pandas as pd
 import plotly.express as px
-import streamlit as st
 from datetime import datetime, timedelta
-from google.genai import types
-import vertexai
-from vertexai.preview.generative_models import GenerativeModel, SafetySetting, Part, Tool
-from vertexai.preview.generative_models import grounding
+
 # Giờ Việt Nam
 vietnam_tz = pytz.timezone('Asia/Ho_Chi_Minh')
 
