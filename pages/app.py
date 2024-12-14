@@ -242,6 +242,10 @@ st.markdown("""
         .st-emotion-cache-1jicfl2 {
             padding: 2rem 3rem 1rem;
         }
+        .st-emotion-cache-1ibsh2c{
+            padding: 2rem 3rem 1rem;
+
+        }
     
 
         h1, h2, h3, h4, h5, h6 {
@@ -336,7 +340,12 @@ st.markdown("""
     height: 48px;
     width: 140px;
     margin-left: 30px;
-}
+}   
+    [data-testid='stAudioInput'] .st-emotion-cache-1mgpp96{
+    height: 48px;
+    width: 140px;
+    margin-left: 30px;
+    }
 
     .stElementContainer element-container st-key-1 st-emotion-cache-unpe4p e1f1d6gn4{
         display: flex;
