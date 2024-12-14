@@ -85,7 +85,7 @@ def get_db_connection():
         return None
 
 # Function to insert user into MySQL
-def insert_user(email, username, password):
+def insert_user(name, email, username, password):
     """
     Inserts Users into the MySQL database.
     :param email:
@@ -97,8 +97,8 @@ def insert_user(email, username, password):
     if connection:
         cursor = connection.cursor()
         date_joined = str(datetime.datetime.now())
-        cursor.execute("INSERT INTO users (email, username, password, date_joined) VALUES (%s, %s, %s, %s)", 
-                       (email, username, password, date_joined))
+        cursor.execute("INSERT INTO users (name, email, username, password, date_joined) VALUES (%s, %s, %s, %s, %s)", 
+                       (name, email, username, password, date_joined))
         connection.commit()
         cursor.close()
         connection.close()
@@ -156,39 +156,42 @@ def validate_username(username):
 def sign_up():
     with st.form(key='signup', clear_on_submit=True):
         st.subheader('Sign Up')
+        name = st.text_input('Name', placeholder='Enter Your Name')
         email = st.text_input('Email', placeholder='Enter Your Email')
         username = st.text_input('Username', placeholder='Enter Your Username')
         password1 = st.text_input('Password', placeholder='Enter Your Password', type='password')
         password2 = st.text_input('Confirm Password', placeholder='Confirm Your Password', type='password')
 
-        if email:
-            if validate_email(email):
-                if email not in get_user_emails():
-                    if validate_username(username):
-                        if username not in get_usernames():
-                            if len(username) >= 2:
-                                if len(password1) >= 6:
-                                    if password1 == password2:
-                                        # Add User to DB
-                                        hashed_password = Hasher.hash(password1)
-                                        insert_user(email, username, hashed_password)
-                                        st.success('Account created successfully!!')
-                                        st.balloons()
+        if name:
+            if email:
+                if validate_email(email):
+                    if email not in get_user_emails():
+                        if validate_username(username):
+                            if username not in get_usernames():
+                                if len(username) >= 2:
+                                    if len(password1) >= 6:
+                                        if password1 == password2:
+                                            # Add User to DB
+                                            hashed_password = Hasher.hash(password1)
+                                            insert_user(name, email, username, hashed_password)
+                                            st.success('Account created successfully!!')
+                                            st.balloons()
+                                        else:
+                                            st.warning('Passwords Do Not Match')
                                     else:
-                                        st.warning('Passwords Do Not Match')
+                                        st.warning('Password is too Short')
                                 else:
-                                    st.warning('Password is too Short')
+                                    st.warning('Username Too short')
                             else:
-                                st.warning('Username Too short')
-                        else:
-                            st.warning('Username Already Exists')
+                                st.warning('Username Already Exists')
 
+                        else:
+                            st.warning('Invalid Username')
                     else:
-                        st.warning('Invalid Username')
+                        st.warning('Email Already exists!!')
                 else:
-                    st.warning('Email Already exists!!')
-            else:
-                st.warning('Invalid Email')
+                    st.warning('Invalid Email')
+       
 
         btn1, bt2, btn3, btn4, btn5 = st.columns(5)
 
@@ -204,29 +207,31 @@ def log_in():
             emails = []
             usernames = []
             passwords = []
+            names = []
 
             for user in users:
                 emails.append(user[2])  # Sử dụng chỉ số (0) để lấy email từ tuple
                 usernames.append(user[1])  # Sử dụng chỉ số (1) để lấy username
                 passwords.append(user[3])  # Sử dụng chỉ số (2) để lấy password
+                names.append(user[5])
 
             credentials = {'usernames': {}}
             for index in range(len(emails)):
                 credentials['usernames'][usernames[index]] = {
-                    'name': usernames[index],  # Đây là tên hiển thị
-                    'password': passwords[index],  # Mật khẩu
-                    'email': emails[index]  # Thêm trường email
+                    'username': usernames[index], 
+                    'password': passwords[index],  
+                    'email': emails[index],
+                    'name': names[index] 
             }
             # Cấu hình Authentication
             
             Authenticator = stauth.Authenticate(credentials, cookie_name='Streamli1', key='abcdef', cookie_expiry_days=4)
-        
+
             try:
                 Authenticator.login("main", fields={'form': ':green[login]'})
             except Exception as e:
                 st.error(e)
             # Thêm điều kiện kiểm tra nếu trả về None
-            print(st.session_state.authentication_status)
             if st.session_state.authentication_status:
                 st.success("Login Successful")
                 st.switch_page("pages/app.py")
