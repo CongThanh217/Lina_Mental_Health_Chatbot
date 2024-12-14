@@ -240,10 +240,10 @@ st.markdown("""
 
         }
         .st-emotion-cache-1jicfl2 {
-            padding: 2rem 3rem 1rem;
+            padding: 1rem 3rem 1rem;
         }
         .st-emotion-cache-1ibsh2c{
-            padding: 2rem 3rem 1rem;
+            padding: 11rem 3rem 1rem;
 
         }
     
