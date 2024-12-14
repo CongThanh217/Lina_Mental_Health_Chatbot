@@ -6,7 +6,6 @@ import pyttsx3
 import threading
 import json
 from datetime import datetime
-from pymongo import MongoClient
 from PIL import Image
 import base64
 import time
