@@ -243,7 +243,7 @@ st.markdown("""
             padding: 1rem 3rem 1rem;
         }
         .st-emotion-cache-1ibsh2c{
-            padding: 11rem 3rem 1rem;
+            padding: 1rem 3rem 1rem;
 
         }
     
