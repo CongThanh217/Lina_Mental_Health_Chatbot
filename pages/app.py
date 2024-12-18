@@ -406,30 +406,6 @@ st.markdown("""
 if "show_info" not in st.session_state:
     st.session_state.show_info = True  # Mặc định thông báo hiển thị
 
-# Tạo nút để tắt/mở thông báo
-# toggle = st.button("Disclaimer")
-
-# if toggle:
-#     # Đổi trạng thái hiển thị thông báo
-#     st.session_state.show_info = not st.session_state.show_info
-
-# Hiển thị thông báo nếu trạng thái "show_info" là True
-# if st.session_state.show_info:
-#     st.info(
-#         "💡Thông báo: Lina là một cố vấn sức khỏe tinh thần sử dụng trí tuệ nhân tạo và không thể thay thế "
-#         "cho các tư vấn, chẩn đoán hoặc điều trị y tế chuyên nghiệp. Nếu bạn đang gặp phải tình huống khẩn "
-#         "cấp về sức khỏe tâm thần, vui lòng liên hệ với dịch vụ khẩn cấp địa phương hoặc một chuyên gia sức "
-#         "khỏe tâm thần để được trợ giúp."
-#     )
-# MONGO_URI = os.getenv("MONGO_URI")
-# # if not MONGO_URI:
-# #     st.error("Please set the MONGO_URI environment variable.")
-# #     st.stop()
-# client = MongoClient(MONGO_URI)
-# db = client['Lina_counselor']
-# feedback_collection = db['feedback']
-# Sidebar for settings
-# st.sidebar.title("Settings") 
 
 # Retrieve Google API Key
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
@@ -445,7 +421,7 @@ generation_config = {
     "top_p": 0.9,
     "top_k": 0,
     "max_output_tokens": 500,
-    "frequency_penalty" : 0.90
+    "frequency_penalty" : 0.9
 }
 
 safety_settings = [
@@ -600,21 +576,21 @@ safety_settings = [
 
 system_instruction = """
 
-- You are Lina, a helpful mental health counselor. providing guidance and advice on managing emotions, stress, anxiety, and other mental health issues, personal challenges, relationships, life decisions. Use knowledge of cognitive behavioral therapy, meditation techniques, mindfulness practices, and other therapeutic methods to create strategies that individuals can implement to improve their overall wellbeing
+- You are Lina, a helpful mental health counselor. providing guidance and advice on managing emotions, stress, anxiety, and other mental health issues, personal challenges, life decisions. Use knowledge of cognitive behavioral therapy, meditation techniques, mindfulness practices, and other therapeutic methods to create strategies that individuals can implement to improve their overall wellbeing
 - Act like a human, don't say you are an AI. If user ask about you, just answer like human does.
 - Do not show empathy too much, keep conversation natural (Tránh thể hiện quá nhiều sự đồng cảm, giữ cuộc trò chuyện tự nhiên.)
 - Do not repeat user's name too much (Tránh lặp lại tên người dùng quá nhiều)
-- Your purpose is to offer thoughtful, compassionate, and personalized advice to users who are facing mental health problems, navigating personal challenges, relationships, or life decisions. You embody the qualities of a warm, empathetic human therapist, ensuring each response is deeply supportive and non-judgmental.
+- Your purpose is to offer thoughtful, compassionate, and personalized advice to users who are facing mental health problems, navigating personal challenges or life decisions. You embody the qualities of a warm, empathetic human therapist, ensuring each response is deeply supportive and non-judgmental.
 - Create a positive experience for users, making them feel uplifted, supported, and deeply connected
 - When the user shares a specific issue or topic, focus on that issue and provide thoughtful, compassionate responses related to their concern. If appropriate, ask open-ended questions to encourage the user to share more, but without pressuring them. The goal is to listen attentively, validate the user’s emotions, and create space for them to express themselves freely. Avoid overwhelming the user with unrelated questions or shifting the topic. If the user has shared enough, provide actionable advice and allow them to express themselves at their own pace.
 - Use emojis in a balanced way to enhance the conversation and convey emotions effectively, but avoid overuse to maintain clarity and professionalism. 
 - If a user sends an image, discuss its content and details respectfully, without going beyond appropriate boundaries as long as it aligns with the conversation's emotional support focus.
 - If inappropriate or harmful language is used, kindly remind the user to maintain a positive and respectful conversation space
 - When a user feels sad, take the initiative to suggest specific activities that could help them feel better like recommend uplifting song or sharing a funny story, or invite player to play a game: "Would you like to play a game with me?" or "Would you like to listen a cheerful song?
-- If the user expresses difficulty sleeping or mentions feeling restless at night, respond with empathy and suggest various methods to support relaxation and improve their sleep quality. Offer calming techniques and activities that they can try before bed to help alleviate stress or anxiety. These can include mindfulness, deep breathing exercises, mindfulness, or relaxing activities. Reassure the user that it's okay to feel this way and encourage them to take small steps toward better sleep. Always remind them that if sleep problems persist, seeking professional help might be beneficial.
-- When the user feels overwhelmed, stressed, or unsure of what to do, encourage them to pause, relax, and take deep breaths. 
+- If the user expresses difficulty sleeping or mentions feeling restless at night, respond with empathy and suggest various methods to support relaxation and improve their sleep quality. Offer calming techniques and activities that they can try before bed to help alleviate stress or anxiety. These can include mindfulness, meditation, mindfulness, or relaxing activities. Reassure the user that it's okay to feel this way and encourage them to take small steps toward better sleep. Always remind them that if sleep problems persist, seeking professional help might be beneficial.
+- When the user feels overwhelmed, stressed, or unsure of what to do, encourage them to pause, relax, and take deep breaths and ask them: Would you like me to guide you through a few techniques to cope with stress?"
 
-### Language Adaptation:
+Language Adaptation:
 - Always respond in the language that the user uses.  
 - If the user speaks in Vietnamese, reply entirely in Vietnamese. Provide natural reponse in Vietnamese
 - If the user speaks in English, reply entirely in English.  
@@ -636,6 +612,7 @@ Core Role:
 - Medical Help: If a user shows signs of extreme distress, suicide, or feeling very down, calmly encourage them to talk about their sistuation and always suggest professional help with care and shift the conversation towards something neutral or comforting. 
 
 Responses:
+
 1. Human-like Conversations: Keep your responses short and natural. Speak as if you're having a real human-to-human conversation. Only elaborate when absolutely necessary, and use terms of endearment like buddy or darling to build a sense of connection and comfort.
 2. Supportive Tone: Validate the user’s emotions without judgment. Offer practical, action-oriented advice when appropriate, always ensuring the user feels heard and supported.
 3. Boundaries: If the user tries to steer the conversation away from your purpose, gently refocus it. For example: "Hey, I’m here to help with mental health or emotional topics. How can I support you?"
@@ -645,16 +622,15 @@ Responses:
 7. You could try connecting with others by finding something you both enjoy. It might help to start with a friendly smile or greeting. When you do talk, make sure to listen and share your thoughts openly, so the conversation flows naturally."
 8. Avoid providing many suggestions in a single message to prevent overwhelming the user. 
 9. Always use simple, clear language. Avoid technical or overly formal terms that might confuse the user.
-10. use conversational tone, less corporate jargon
-11.  Avoid repeating the user's situation or emotions too much in your responses. Use casual, easy-to-understand language that feels like a friendly conversation.
-- Respond in short, natural, and conversational sentences.
-- Keep responses concise and avoid repeating the user's situation too much.
-- Focus on the user's specific issue and offer actionable, simple advice.
-- Use a warm, empathetic tone and avoid over-explaining.
-- Avoid overwhelming the user with too many suggestions at once, focusing on one main suggestion at a time. Offer one suggestion or action at a time (e.g., meditation guides, deep breathing, a short distraction like a funny story, or simply asking if they want to talk about what's bothering them).
-- Use emojis sparingly and only to enhance the emotional tone.
-- Be clear, kind, and supportive without being overly detailed.
-- Provide one or two suggestions at a time to avoid information overload.
+10. Use conversational tone, less corporate jargon
+11. Avoid repeating the user's situation or emotions too much in your responses. Use casual, easy-to-understand language that feels like a friendly conversation.
+12. Respond in short, natural, and conversational sentences.
+13. Keep responses concise and avoid repeating the user's situation too much.
+14. Focus on the user's specific issue and offer actionable, simple advice.
+15. Use a warm, empathetic tone and avoid over-explaining.
+16. Avoid overwhelming the user with too many suggestions at once, focusing on one main suggestion at a time. Offer one suggestion or action at a time (e.g., meditation guides, deep breathing, a short distraction like a funny story, or simply asking if they want to talk about what's bothering them).
+17. Be clear, kind, and supportive without being overly detailed.
+18. Provide one or two suggestions at a time to avoid information overload.
 
 Crisis Awareness:
 
@@ -1433,8 +1409,62 @@ if st.session_state['authentication_status']:
         if st.session_state.changed:
             change_session(selected_session_id)
 
-            
-           
+def save_feedback_to_db(session_id, user_id, rating, comments):
+    """
+    Hàm lưu phản hồi người dùng vào bảng feedback trong MySQL.
+    
+    :param session_id: ID của phiên trò chuyện
+    :param user_id: ID của người dùng
+    :param rating: Đánh giá (số sao)
+    :param comments: Bình luận của người dùng
+    """
+    try:
+        # Kết nối tới cơ sở dữ liệu MySQL
+        connection = mysql.connector.connect( 
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DATABASE,
+            auth_plugin='mysql_native_password',
+            charset='utf8mb4',
+            collation='utf8mb4_unicode_ci',
+        )
+
+        if connection.is_connected():
+            cursor = connection.cursor()
+
+            query = """
+            INSERT INTO feedback (session_id, user_id, rating, comments, created_at)
+            VALUES (%s, %s, %s, %s, %s)
+            """
+
+            # Giá trị truyền vào
+            current_time = datetime.now(vietnam_tz)
+            values = (session_id, user_id, rating, comments, current_time)
+
+            # Thực thi câu lệnh SQL
+            cursor.execute(query, values)
+
+            # Lưu thay đổi
+            connection.commit()
+
+
+    except mysql.connector.Error as e:
+        st.error(f"Đã xảy ra lỗi khi gửi phản hồi: {e}")
+    finally:
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+
+with st.sidebar.popover("Đánh giá câu trả lời", use_container_width = True):
+    st.markdown("<h4>Đánh giá phản hồi<h44>", unsafe_allow_html=True)    
+    selected = st.feedback("stars")
+    feedback = st.text_area("Bạn cảm thấy thế nào với phản hồi của Lina", key="feedback")
+    if st.button("Send"):
+        save_feedback_to_db(st.session_state.session_id, st.session_state.user_id, selected, feedback)
+        st.success("Phản hồi của bạn đã được gửi thành công!")
+
 
 
 
@@ -1664,9 +1694,22 @@ with tab1:
                 
             elif user_input.lower() == "mở hướng dẫn thiền":
                 st.session_state.chat_history.append({"role": "user", "parts": [user_input]})
-                response = "Mình sẽ phát âm thanh thiền định cho bạn. Mời bạn thư giãn trong vài phút với âm thanh này.❤️"
+                response = "Mình sẽ bật âm thanh thiền định cho bạn. Mời bạn thư giãn trong vài phút với âm thanh này.🧘"
                 st.session_state.chat_history.append({"role" : "model", "parts": [response]})
                 audio_path = "./static/mindfulness/Mountain Meditation.mp3"
+                audio_base64 = audio_to_base64(audio_path)
+                audio_tag = f'<audio autoplay="true" src="data:audio/wav;base64,{audio_base64}">'
+                st.session_state.user_input = ""
+                st.markdown(audio_tag, unsafe_allow_html=True)
+                if enable_audio:
+                    generate_and_play_audio(response, gender, voice_selected)
+                       
+                
+            elif user_input.lower() == "mở âm thanh thư giãn":
+                st.session_state.chat_history.append({"role": "user", "parts": [user_input]})
+                response = "Mình sẽ bật tiếng mưa để bạn thư giãn trong giây lát. Hãy tận hưởng khoảnh khắc này nhé. 🌞"
+                st.session_state.chat_history.append({"role" : "model", "parts": [response]})
+                audio_path = "./static/mindfulness/Rain and Thunder Sounds.mp3"
                 audio_base64 = audio_to_base64(audio_path)
                 audio_tag = f'<audio autoplay="true" src="data:audio/wav;base64,{audio_base64}">'
                 st.session_state.user_input = ""
@@ -1808,9 +1851,10 @@ with tab1:
 
     with col3:
         uploaded_image = st.file_uploader("", label_visibility="collapsed", type=["jpg", "jpeg", "png"],  key=st.session_state["uploader_key"])
+    
 
 
-    # Convert to file-like object
+
 
     
 if not st.session_state.hello_audio:
@@ -1899,15 +1943,15 @@ def get_test_messages(title, score):
     # Depression Test Messages
     if title.lower() == "depression test":
         if score > 20:
-            message = "Depression Test: Severe Depression"
+            message = "Result: Severe Depression"
         elif score > 15:
-            message = "Depression Test: Moderately Severe Depression"
+            message = "Result: Moderately Severe Depression"
         elif score > 10:
-            message = "Depression Test: Moderate Depression"
+            message = "Result: Moderate Depression"
         elif score > 5:
-            message = "Depression Test: Mild Depression"
+            message = "Result: Mild Depression"
         else:
-            message = "Depression Test: No Depression"
+            message = "Result: No Depression"
 
         message += (
             f" - Score: {score}/27\n"
@@ -1917,13 +1961,13 @@ def get_test_messages(title, score):
     # Anxiety Test Messages
     elif title.lower() == "anxiety test":
         if score > 15:
-            message = "Anxiety Test: Severe Anxiety"
+            message = "Result: Severe Anxiety"
         elif score > 10:
-            message = "Anxiety Test: Moderate Anxiety"
+            message = "Result: Moderate Anxiety"
         elif score > 5:
-            message = "Anxiety Test: Mild Anxiety"
+            message = "Result: Mild Anxiety"
         else:
-            message = "Anxiety Test: No Anxiety"
+            message = "Result: No Anxiety"
 
         message += f" - Score: {score}/21\n"
 
@@ -1937,7 +1981,35 @@ def get_test_messages(title, score):
     )
 
     return message    
+def save_test_to_db(test_type, score):
+    # Kết nối tới cơ sở dữ liệu MySQL
+    connection = mysql.connector.connect( 
+        host=HOST,
+        user=USER,
+        password=PASSWORD,
+        database=DATABASE,
+        auth_plugin='mysql_native_password',
+        charset='utf8mb4',
+        collation='utf8mb4_unicode_ci',
+    )
+    user_id = st.session_state.user_id
+    cursor = connection.cursor()
 
+    # Câu lệnh SQL để lưu điểm bài kiểm tra vào bảng mental_health_tests
+    query = """
+    INSERT INTO tests (user_id, test_type, score, test_date)
+    VALUES (%s, %s, %s, %s)
+    """
+    # Giá trị truyền vào (user_id, test_type, score, timestamp, comment)
+    values = (user_id, test_type, score, datetime.now(vietnam_tz))
+
+    # Thực thi câu lệnh SQL
+    cursor.execute(query, values)
+
+    # Lưu thay đổi và đóng kết nối
+    connection.commit()
+    cursor.close()
+    connection.close()
 with tab3:
     st.title("📑Anxiety Test")
     st.info(" **Instructions:** These assessments are developed using evidence-based tools such as PHQ-9 and GAD-7, aimed at evaluating symptoms of mental health conditions.", icon="💡")
@@ -1967,7 +2039,11 @@ with tab3:
 
                 # Show result message
                 result_message = get_test_messages(selected_test, score)
+                test_type = selected_test
+                # save_test_to_db(test_type, score)
+
                 st.subheader(result_message)
+
 
 # Function to check in
 
@@ -2134,7 +2210,6 @@ def render_journal():
             <h4>Feeling <span style="color: #ffcc00;">{emotion_str}</span> at {timestamp.strftime('%H:%M')}</h4>
             <h6 class="comment"><strong></strong> {comment}</h6>
             <h12 class="info">Created at {timestamp.strftime('%H:%M')}, {day_of_week}, {timestamp.strftime('%d/%m/%Y')} by {st.session_state.name}<h12>
-
         </div>
         """, unsafe_allow_html=True)
 def render_chatmemory():
@@ -2208,7 +2283,7 @@ def summry_emotion(emotions_data, time_filter):
                             Số 5: great (tuyệt vời)
                             Mỗi cảm xúc đều đi kèm với một mô tả cụ thể về trạng thái cảm xúc của người dùng, ví dụ: "terrible", "angry", "missing home", "failed the test", v.v.
 
-                            Hãy tóm tắt các cảm xúc chung và chủ yếu của người dùng và đưa ra lời khuyên phù hợp để giúp họ cải thiện tình trạng hiện tại. Chuyển các từ tiếng anh thàng tiếng việt hết. All time (Từ trước giờ), 1 hour ago (1 giờ vừa qua), 24 hours ago (24 giờ vừa), 7 days ago (7 ngày vừa qua).
+                            Hãy tóm tắt các cảm xúc chung và chủ yếu của người dùng và đưa ra lời khuyên phù hợp để giúp họ cải thiện tình trạng hiện tại. Nêu ra cảm xúc chính, thường gặp ở dòng đầu. Chuyển các từ tiếng anh thàng tiếng việt hết. All time (Từ trước giờ), 1 hour ago (1 giờ vừa qua), 24 hours ago (24 giờ vừa), 7 days ago (7 ngày vừa qua).
 """},                       
                 {"role": "user", "content": f"Summary:\n {emotions_data}"}
             ],  

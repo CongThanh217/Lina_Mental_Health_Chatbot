@@ -98,7 +98,7 @@ def validate_username(username):
 
 # Signup function (same as before but using MySQL)
 def sign_up():
-    with st.form(key='signup', clear_on_submit=True):
+    with st.form(key='sign', clear_on_submit=True):
         st.subheader(':green[Sign Up]')
         email = st.text_input(':blue[Email]', placeholder='Enter Your Email')
         username = st.text_input(':blue[Username]', placeholder='Enter Your Username')
